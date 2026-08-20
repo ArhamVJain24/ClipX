@@ -163,8 +163,6 @@
                 
                 if (err.message.includes('503') || err.message.includes('overloaded')) {
                     errorDiv.innerHTML = '<strong>⚠️ Google AI Servers Busy</strong><br>The AI is currently experiencing massive global demand. Please wait a few minutes and try again. Your video is perfectly fine.';
-                } else if (file && file.size > 100 * 1024 * 1024) { 
-                    errorDiv.innerHTML = '<strong>⚠️ Upload Blocked by Security Protocol</strong><br>Cloudflare security has blocked this massive file transfer to prevent network timeouts. For videos of this size, you can effortlessly bypass this restriction by using the <strong>Google Drive Link</strong> option below!<br><br><em>(Note: Ensure the Drive link is set to "Anyone with the link can view")</em>';
                 } else {
                     errorDiv.innerHTML = '<strong>⚠️ Error</strong><br>' + err.message;
                 }
