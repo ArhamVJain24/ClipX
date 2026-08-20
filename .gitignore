@@ -4,3 +4,4 @@ __pycache__/
 uploads/
 .gemini/
 cloudflared.exe
+.env
