@@ -2,3 +2,5 @@ flask
 google-genai
 python-dotenv
 gdown
+
+imageio-ffmpeg
