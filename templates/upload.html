@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClipX — Find Viral Moments</title>
+    <meta name="description" content="Upload talks, podcasts, or panels. ClipX analyzes audio to find insights, reactions, and the best clips.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <span class="logo">ClipX</span>
+        </div>
+        <button class="btn-new-project" onclick="window.location.href='/'">New Project</button>
+    </header>
+
+    <main class="upload-screen">
+        <div class="waveform-bg" id="waveformBg"></div>
+        <h1 class="upload-heading">Upload a video to find its best moments</h1>
+        <p class="upload-subtext">Upload talks, podcasts, or panels. We will analyze the audio, find insights and reactions, and extract the best clips.</p>
+        
+        <div id="errorMessage" style="display: none; background: rgba(255, 80, 80, 0.1); border: 1px solid rgba(255, 80, 80, 0.3); color: #ff9999; padding: 16px 24px; border-radius: 12px; margin-bottom: 24px; max-width: 480px; text-align: left; font-size: 14px; line-height: 1.5;"></div>
+        <div class="upload-options" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 400px;">
+            <label class="btn-upload" for="videoInput" style="margin-bottom: 20px; width: 100%; box-sizing: border-box;">
+                <svg class="upload-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Select Video File
+                <input type="file" id="videoInput" accept=".mp4" hidden>
+            </label>
+            
+            <div class="drive-upload-container" style="display: flex; gap: 12px; width: 100%; box-sizing: border-box; margin-top: 10px; height: 52px;">
+                <input type="text" id="driveLinkInput" placeholder="Or paste Google Drive link here..." style="flex: 1; padding: 0 20px; border-radius: 30px; border: 1px solid hsl(0, 0%, 25%); background: hsl(210, 10%, 8%); color: var(--text-head); outline: none; font-family: 'Inter', sans-serif; font-size: 16px; transition: border-color 0.2s ease;">
+                <button id="btnDriveUpload" class="btn-upload" style="margin: 0; padding: 0 32px; font-size: 16px; border: none; font-family: 'Inter', sans-serif; height: 100%; border-radius: 30px;">Import</button>
+            </div>
+            <p style="font-size: 13px; color: hsl(0, 0%, 50%); margin-top: 16px; font-weight: 500;">Ensure link is set to "Anyone with the link can view"</p>
+        </div>
+    </main>
+
+    <!-- Processing Screen -->
+    <main class="processing-screen" id="processingScreen" style="display:none;">
+        <div class="processing-content">
+            <div class="processing-header">
+                <span class="status-text" id="statusText">Uploading the video</span>
+                <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-container-thin">
+                <div class="progress-bar-thin" id="progressBar"></div>
+            </div>
+            <p class="processing-subtext">This can take several minutes for long videos. Please don't close the page.</p>
+        </div>
+    </main>
+
+    <script>
+        // Generate random waveform bars for the background decoration
+        const waveformBg = document.getElementById('waveformBg');
+        for (let i = 0; i < 80; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'waveform-bar';
+            const height = Math.random() * 60 + 10;
+            bar.style.height = height + 'px';
+            bar.style.opacity = 0.03 + Math.random() * 0.05;
+            waveformBg.appendChild(bar);
+        }
+
+        const videoInput = document.getElementById('videoInput');
+        const uploadScreen = document.querySelector('.upload-screen');
+        const processingScreen = document.getElementById('processingScreen');
+        const statusText = document.getElementById('statusText');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
+
+        async function pollTask(taskId) {
+            while (true) {
+                const resp = await fetch(`/api/task-status/${taskId}`);
+                if (!resp.ok) throw new Error("Task status check failed.");
+                
+                const data = await resp.json();
+                if (!data.success) throw new Error(data.error || "Unknown error during task.");
+                
+                const status = data.task.status;
+                if (status === 'complete') {
+                    return data.task;
+                } else if (status === 'error') {
+                    throw new Error(data.task.error || "Task failed with an error.");
+                }
+                
+                // Wait 2 seconds before polling again
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+
+        videoInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.name.toLowerCase().endsWith('.mp4')) {
+                alert('Please select an .mp4 file.');
+                return;
+            }
+
+            document.getElementById('errorMessage').style.display = 'none';
+            uploadScreen.style.display = 'none';
+            processingScreen.style.display = 'flex';
+            statusText.textContent = 'Uploading the video';
+            progressBar.style.width = '10%';
+            progressPercent.textContent = '10%';
+
+            try {
+                // Step 1: Upload (synchronous since it's just passing bytes)
+                const formData = new FormData();
+                formData.append('video', file);
+
+                const uploadResp = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const uploadData = await uploadResp.json();
+                if (!uploadData.success) throw new Error(uploadData.error || 'Upload failed');
+
+                progressBar.style.width = '30%';
+                progressPercent.textContent = '30%';
+                statusText.textContent = 'Analyzing the video';
+
+                let fakeProgress = 30;
+                const progressInterval = setInterval(() => {
+                    if (fakeProgress < 95) {
+                        fakeProgress += Math.random() * 5;
+                        if (fakeProgress > 95) fakeProgress = 95;
+                        progressBar.style.width = fakeProgress + '%';
+                        progressPercent.textContent = Math.floor(fakeProgress) + '%';
+                    }
+                }, 1000);
+
+                // Step 2: Analyze (Async Polling)
+                const analyzeInitResp = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: uploadData.filename })
+                });
+                
+                const analyzeInitData = await analyzeInitResp.json();
+                if (!analyzeInitData.success) throw new Error(analyzeInitData.error || 'Failed to start analysis');
+
+                // Poll until complete
+                await pollTask(analyzeInitData.task_id);
+                
+                clearInterval(progressInterval);
+
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                statusText.textContent = 'Done! Redirecting...';
+
+                setTimeout(() => {
+                    window.location.href = '/results/' + encodeURIComponent(uploadData.filename);
+                }, 500);
+
+            } catch (err) {
+                uploadScreen.style.display = 'flex';
+                processingScreen.style.display = 'none';
+                const errorDiv = document.getElementById('errorMessage');
+                
+                if (err.message.includes('503') || err.message.includes('overloaded')) {
+                    errorDiv.innerHTML = '<strong>⚠️ Google AI Servers Busy</strong><br>The AI is currently experiencing massive global demand. Please wait a few minutes and try again. Your video is perfectly fine.';
+                } else if (file && file.size > 100 * 1024 * 1024) { 
+                    errorDiv.innerHTML = '<strong>⚠️ Upload Blocked by Security Protocol</strong><br>Cloudflare security has blocked this massive file transfer to prevent network timeouts. For videos of this size, you can effortlessly bypass this restriction by using the <strong>Google Drive Link</strong> option below!<br><br><em>(Note: Ensure the Drive link is set to "Anyone with the link can view")</em>';
+                } else {
+                    errorDiv.innerHTML = '<strong>⚠️ Error</strong><br>' + err.message;
+                }
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Handle Drive Link Upload
+        const btnDriveUpload = document.getElementById('btnDriveUpload');
+        const driveLinkInput = document.getElementById('driveLinkInput');
+        
+        btnDriveUpload.addEventListener('click', async () => {
+            const url = driveLinkInput.value.trim();
+            if (!url) {
+                alert('Please paste a Google Drive link.');
+                return;
+            }
+            if (!url.includes('drive.google.com')) {
+                alert('Please enter a valid Google Drive link.');
+                return;
+            }
+
+            document.getElementById('errorMessage').style.display = 'none';
+            uploadScreen.style.display = 'none';
+            processingScreen.style.display = 'flex';
+            statusText.textContent = 'Downloading from Google Drive...';
+            progressBar.style.width = '10%';
+            progressPercent.textContent = '10%';
+
+            try {
+                // Step 1: Download from Drive (Async Polling)
+                const uploadInitResp = await fetch('/api/upload-drive', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ drive_url: url })
+                });
+                
+                const uploadInitData = await uploadInitResp.json();
+                if (!uploadInitData.success) throw new Error(uploadInitData.error || 'Failed to start drive download');
+
+                // Poll until download is complete
+                const driveTask = await pollTask(uploadInitData.task_id);
+
+                progressBar.style.width = '30%';
+                progressPercent.textContent = '30%';
+                statusText.textContent = 'Analyzing the video';
+
+                let fakeProgress = 30;
+                const progressInterval = setInterval(() => {
+                    if (fakeProgress < 95) {
+                        fakeProgress += Math.random() * 5;
+                        if (fakeProgress > 95) fakeProgress = 95;
+                        progressBar.style.width = fakeProgress + '%';
+                        progressPercent.textContent = Math.floor(fakeProgress) + '%';
+                    }
+                }, 1000);
+
+                // Step 2: Analyze (Async Polling)
+                const analyzeInitResp = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: driveTask.filename })
+                });
+                
+                const analyzeInitData = await analyzeInitResp.json();
+                if (!analyzeInitData.success) throw new Error(analyzeInitData.error || 'Failed to start analysis');
+
+                // Poll until complete
+                await pollTask(analyzeInitData.task_id);
+                
+                clearInterval(progressInterval);
+
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                statusText.textContent = 'Done! Redirecting...';
+
+                setTimeout(() => {
+                    window.location.href = '/results/' + encodeURIComponent(driveTask.filename);
+                }, 500);
+
+            } catch (err) {
+                uploadScreen.style.display = 'flex';
+                processingScreen.style.display = 'none';
+                const errorDiv = document.getElementById('errorMessage');
+                
+                if (err.message.includes('503') || err.message.includes('overloaded')) {
+                    errorDiv.innerHTML = '<strong>⚠️ Google AI Servers Busy</strong><br>The AI is currently experiencing massive global demand. Please wait a few minutes and try again. Your video is perfectly fine.';
+                } else {
+                    errorDiv.innerHTML = '<strong>⚠️ Error</strong><br>' + err.message;
+                }
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

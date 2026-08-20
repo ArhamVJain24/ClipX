@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClipX — Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <span class="logo">ClipX</span>
+        </div>
+        <button class="btn-new-project" onclick="window.location.href='/'">New Project</button>
+    </header>
+
+    <main class="results-dashboard">
+        <!-- Left Column: Video + Timeline -->
+        <div class="video-section">
+            <div class="video-container">
+                <video class="video-player" id="videoPlayer" src="/api/video/{{ filename }}" preload="metadata"></video>
+                <div class="video-controls-overlay">
+                    <button class="play-btn" id="playBtn">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+                    </button>
+                </div>
+                <div class="video-info-overlay">
+                    <span class="video-label">CURRENTLY PLAYING</span>
+                    <span class="video-title" id="videoTitle">Loaded Video Source</span>
+                </div>
+                <div class="video-time-overlay">
+                    <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-section">
+                <div class="timeline-header">
+                    <span class="timeline-label">MOMENT DISTRIBUTION TIMELINE</span>
+                    <span class="timeline-count" id="timelineCount">0 Flagged Highlights</span>
+                </div>
+                <div class="timeline-track" id="timelineTrack">
+                    <div class="timeline-waveform" id="timelineWaveform"></div>
+                    <div class="timeline-playhead" id="timelinePlayhead"></div>
+                    <!-- Markers will be injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Ranked Moments -->
+        <div class="moments-sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">RANKED MOMENTS</span>
+                <div class="status-dots">
+                    <span class="dot dot-cyan"></span>
+                    <span class="dot dot-amber"></span>
+                </div>
+            </div>
+            <div class="moments-list" id="momentsList">
+                <!-- Moment cards injected by JS -->
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
