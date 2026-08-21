@@ -114,7 +114,11 @@ def index():
         for f in os.listdir(uploads_dir):
             if f.lower().endswith('.mp4') and '_clip_' not in f:
                 local_files.append(f)
-    return render_template('upload.html', local_files=local_files)
+                
+    # Detect if we are running on Render (cloud) vs Localhost
+    is_local = os.environ.get('RENDER') is None
+    
+    return render_template('upload.html', local_files=local_files, is_local=is_local)
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():

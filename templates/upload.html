@@ -35,6 +35,7 @@
                 <button id="btnDriveUpload" class="btn-upload" style="margin: 0; padding: 0 32px; font-size: 16px; border: none; font-family: 'Inter', sans-serif; height: 100%; border-radius: 30px;">Import</button>
             </div>
             
+            {% if is_local %}
             <div style="width: 100%; display: flex; align-items: center; margin: 24px 0;">
                 <div style="flex: 1; height: 1px; background: hsl(0, 0%, 20%);"></div>
                 <span style="padding: 0 16px; color: hsl(0, 0%, 50%); font-size: 12px; font-weight: 600; letter-spacing: 1px;">OR</span>
@@ -81,6 +82,7 @@
                 <button id="btnLocalAnalyze" class="btn-upload" style="margin: 0; padding: 0 32px; font-size: 16px; border: none; font-family: 'Inter', sans-serif; height: 100%; border-radius: 30px; background-color: hsl(168, 60%, 48%); color: hsl(210, 10%, 8%); font-weight: 700; transition: transform 0.2s ease, filter 0.2s ease;">Analyze</button>
             </div>
             <p style="font-size: 13px; color: hsl(0, 0%, 50%); margin-top: 16px; font-weight: 500; text-align: center; line-height: 1.5;">Pro Tip: For massive 14GB+ files, drag them directly into the <code style="background: hsl(0, 0%, 15%); padding: 2px 6px; border-radius: 4px; color: hsl(168, 60%, 48%);">ClipX/uploads</code> folder on your PC first to bypass browser upload limits.</p>
+            {% endif %}
         </div>
     </main>
 
