@@ -279,7 +279,6 @@ def run_analysis_task(task_id, filename):
             # Strict API Rate Limit Pause (prevents 429 TPM crash)
             if i > 0:
                 logger.info("Waiting 60 seconds to respect Google API limits...")
-                import time
                 time.sleep(60)
             
             chunk_offset = i * 1800
