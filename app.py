@@ -1,4 +1,5 @@
 import os
+import shutil
 import json
 import logging
 import subprocess
@@ -27,7 +28,7 @@ app = Flask(__name__)
 active_tasks = {}
 
 # Configuration
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024 * 1024  # 5GB
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024 * 1024  # 100GB max upload
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -41,7 +42,49 @@ def get_cached_results(filename):
     cache_path = os.path.join(CACHE_FOLDER, f"{safe_name}.json")
     if os.path.exists(cache_path):
         with open(cache_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            cached = json.load(f)
+            
+        # Retrofit missing clips for older cache files
+        updated = False
+        moments = cached.get('moments', [])
+        total_duration = cached.get('total_duration', 0.0)
+        
+        # We need video_path to extract clips
+        video_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        if os.path.exists(video_path) and moments:
+            import imageio_ffmpeg
+            ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
+            
+            for idx, moment in enumerate(moments):
+                clip_start = max(0, float(moment.get('start_seconds', 0)) - 2)
+                clip_end = float(moment.get('end_seconds', 0)) + 2
+                if total_duration > 0:
+                    clip_end = min(total_duration, clip_end)
+                    
+                filename_without_ext = os.path.splitext(filename)[0]
+                clip_filename = f"{filename_without_ext}_clip_{idx}.mp4"
+                clip_path = os.path.join(app.config['UPLOAD_FOLDER'], clip_filename)
+                
+                # Check if clip is missing
+                if 'clip_url' not in moment or not os.path.exists(clip_path):
+                    moment['clip_url'] = f"/api/video/{clip_filename}"
+                    updated = True
+                    logger.info(f"Auto-Clipper (Cache): Extracting missing clip {idx} for {filename}")
+                    try:
+                        clip_cmd = [
+                            ffmpeg_exe, '-ss', str(clip_start), '-to', str(clip_end),
+                            '-i', video_path, '-c', 'copy', '-y', clip_path
+                        ]
+                        subprocess.run(clip_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    except Exception as e:
+                        logger.error(f"Failed to extract clip {idx}: {e}")
+                        
+            if updated:
+                with open(cache_path, 'w', encoding='utf-8') as f:
+                    json.dump(cached, f, ensure_ascii=False, indent=2)
+                    
+        return cached
     return None
 
 def save_to_cache(filename, data):
@@ -65,7 +108,13 @@ def add_cors_headers(response):
 
 @app.route('/')
 def index():
-    return render_template('upload.html')
+    uploads_dir = app.config['UPLOAD_FOLDER']
+    local_files = []
+    if os.path.exists(uploads_dir):
+        for f in os.listdir(uploads_dir):
+            if f.lower().endswith('.mp4') and '_clip_' not in f:
+                local_files.append(f)
+    return render_template('upload.html', local_files=local_files)
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
@@ -152,7 +201,38 @@ def run_analysis_task(task_id, filename):
         logger.info(f"Checking cache for {filename}...")
         cached = get_cached_results(filename)
         if cached:
-            logger.info(f"Cache HIT for {filename} — returning cached results")
+            logger.info(f"Cache HIT for {filename} - verifying clips...")
+            
+            import imageio_ffmpeg
+            ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
+            
+            total_duration = cached.get('total_duration', 0.0)
+            moments = cached.get('moments', [])
+            updated = False
+            
+            for idx, moment in enumerate(moments):
+                clip_start = max(0, float(moment.get('start_seconds', 0)) - 2)
+                clip_end = float(moment.get('end_seconds', 0)) + 2
+                if total_duration > 0:
+                    clip_end = min(total_duration, clip_end)
+                    
+                filename_without_ext = os.path.splitext(filename)[0]
+                clip_filename = f"{filename_without_ext}_clip_{idx}.mp4"
+                clip_path = os.path.join(app.config['UPLOAD_FOLDER'], clip_filename)
+                
+                if 'clip_url' not in moment or not os.path.exists(clip_path):
+                    moment['clip_url'] = f"/api/video/{clip_filename}"
+                    updated = True
+                    logger.info(f"Auto-Clipper (Cache): Extracting missing clip {idx}")
+                    clip_cmd = [
+                        ffmpeg_exe, '-ss', str(clip_start), '-to', str(clip_end),
+                        '-i', video_path, '-c', 'copy', '-y', clip_path
+                    ]
+                    subprocess.run(clip_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            
+            if updated:
+                save_to_cache(filename, cached)
+                
             active_tasks[task_id] = {"status": "complete", "data": cached}
             return
             
@@ -174,8 +254,11 @@ def run_analysis_task(task_id, filename):
         except Exception as e:
             logger.error(f"Error getting duration: {e}")
         
-        # Extract audio using ffmpeg in chunks
+        # HLS chunking logic removed to save space (Switching to Auto-Clipper)
+        
         filename_without_ext = os.path.splitext(filename)[0]
+        
+        # Extract audio using ffmpeg in chunks (System 1)
         audio_path_base = os.path.join(app.config['UPLOAD_FOLDER'], f"{filename_without_ext}_audio")
         
         logger.info(f"Extracting audio chunks to {audio_path_base}_%03d.mp3")
@@ -199,6 +282,12 @@ def run_analysis_task(task_id, filename):
         client = genai.Client(api_key=api_key)
         
         for i, chunk_path in enumerate(audio_chunks):
+            # Strict API Rate Limit Pause (prevents 429 TPM crash)
+            if i > 0:
+                logger.info("Waiting 60 seconds to respect Google API limits...")
+                import time
+                time.sleep(60)
+            
             chunk_offset = i * 1800
             logger.info(f"Uploading chunk {i+1}/{len(audio_chunks)}: {chunk_path}")
             audio_file = client.files.upload(file=chunk_path)
@@ -337,10 +426,31 @@ def run_analysis_task(task_id, filename):
             else:
                 return f"{mins:02d}:{secs:02d}"
             
-        for moment in moments:
+        for idx, moment in enumerate(moments):
             start_fmt = format_time(moment.get('start_seconds', 0))
             end_fmt = format_time(moment.get('end_seconds', 0))
-            moment['timestamp_display'] = f"{start_fmt} — {end_fmt}"
+            moment['timestamp_display'] = f"{start_fmt} - {end_fmt}"
+            
+            # Auto-Clipper: Extract 45s clip with 2s context buffer
+            try:
+                clip_start = max(0, float(moment.get('start_seconds', 0)) - 2)
+                clip_end = min(total_duration, float(moment.get('end_seconds', 0)) + 2)
+                
+                filename_without_ext = os.path.splitext(filename)[0]
+                clip_filename = f"{filename_without_ext}_clip_{idx}.mp4"
+                clip_path = os.path.join(app.config['UPLOAD_FOLDER'], clip_filename)
+                
+                if not os.path.exists(clip_path):
+                    logger.info(f"Auto-Clipper: Extracting clip {idx} ({clip_start}s to {clip_end}s)")
+                    clip_cmd = [
+                        ffmpeg_exe, '-ss', str(clip_start), '-to', str(clip_end),
+                        '-i', video_path, '-c', 'copy', '-y', clip_path
+                    ]
+                    subprocess.run(clip_cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                
+                moment['clip_url'] = f"/api/video/{clip_filename}"
+            except Exception as e:
+                logger.error(f"Failed to extract clip {idx}: {e}")
             
         try:
             if audio_path and os.path.exists(audio_path):
@@ -390,6 +500,44 @@ def get_api_results(filename):
         return jsonify(cached)
     return jsonify({"success": False, "error": "Results not found for this video. It may not have been analyzed yet."}), 404
 
+from flask import send_from_directory
+import shutil
+
+@app.route('/api/hls/<filename_base>/<path:filename>')
+def serve_hls(filename_base, filename):
+    hls_dir = os.path.join(app.config['UPLOAD_FOLDER'], f"hls_{filename_base}")
+    return send_from_directory(hls_dir, filename)
+
+@app.route('/api/cleanup/<filename>', methods=['POST'])
+def cleanup_project(filename):
+    try:
+        import glob
+        filename_base = os.path.splitext(filename)[0]
+        upload_dir = app.config['UPLOAD_FOLDER']
+        
+        # 1. Delete all generated 45-second clips
+        clip_pattern = os.path.join(upload_dir, f"{filename_base}_clip_*.mp4")
+        for clip_file in glob.glob(clip_pattern):
+            try:
+                os.remove(clip_file)
+                logger.info(f"Cleaned up clip: {clip_file}")
+            except Exception as e:
+                logger.warning(f"Failed to delete {clip_file}: {e}")
+                
+        # 3. Delete the cache file
+        safe_name = secure_filename(filename)
+        cache_path = os.path.join(CACHE_FOLDER, f"{safe_name}.json")
+        if os.path.exists(cache_path):
+            try:
+                os.remove(cache_path)
+                logger.info(f"Cleaned up cache: {cache_path}")
+            except:
+                pass
+                
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 @app.route('/api/video/<filename>')
 def get_video(filename):
     try:
@@ -430,3 +578,4 @@ def results(filename):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
+

@@ -1,0 +1,538 @@
+{
+  "success": true,
+  "moments": [
+    {
+      "start_seconds": 329.0,
+      "end_seconds": 355.0,
+      "quote": "I need a very big round of applause. Zor se taaliyan ho jayein. To ye taaliyan jo hain ye mere liye nahi hain, ye taaliyan aap logo ke liye hain, ki you are the people who are actually wanting to grow.",
+      "summary": "Speaker asks for a round of applause for the proactive entrepreneurs attending to grow their business.",
+      "insight_score": 60,
+      "reaction_score": 40,
+      "tags": [
+        "Applause",
+        "Entrepreneurs",
+        "Growth Mindset"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "05:29 - 05:55",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_0.mp4"
+    },
+    {
+      "start_seconds": 2180.0,
+      "end_seconds": 2215.0,
+      "quote": "To bahut zyada noise hai, but clarity nahi hai. AI ke baare mein bahut news aa rahi hai aur ye app use karo, wo app use karo. To it is like a jungle. And guys, are you lost in the jungle? Yes or no? Yes. Theek hai? To nikaalte hain aapko bahar is jungle se. So let me be your guide on this journey. But I am not an ordinary guide. So who am I? Guys, I am the Indiana Jones of the AI world.",
+      "summary": "Sanjeev humorously introduces himself as the \"Indiana Jones of the AI world\" to guide the audience through the overwhelming jungle of AI tools.",
+      "insight_score": 70,
+      "reaction_score": 40,
+      "tags": [
+        "AI Jungle",
+        "Humor",
+        "Keynote Hook",
+        "Sanjeev Jain"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "36:20 - 36:55",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_1.mp4"
+    },
+    {
+      "start_seconds": 2880.0,
+      "end_seconds": 2930.0,
+      "quote": "So first of all we will talk about AI for strategy. To without a business plan, a vision is just a daydream. Bahut saare businesses ki ye problem hai, main business owner se poochhta hoon ki bhai Rohit bhai plan kya hai? Wo kehte hain plan banaya to tha, but yaar wo bahut bada tha, yaad to nahi aa raha. Theek hai na? Agar bana bhi hota hai, pehli baat to bahut complex hota hai, and agar kya hai ki mostly to bana nahi hota.",
+      "summary": "Sanjeev explains why having a written, accessible business plan is crucial, noting that a vision without a plan is merely a daydream.",
+      "insight_score": 75,
+      "reaction_score": 30,
+      "tags": [
+        "Business Strategy",
+        "Planning",
+        "Entrepreneurship",
+        "Vision"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "48:00 - 48:50",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_2.mp4"
+    },
+    {
+      "start_seconds": 3012.0,
+      "end_seconds": 3075.0,
+      "quote": "Maine do log patthar tod rahe hain... so two people are breaking stones, right? And I went and asked them ki bhaiya kya kar rahe ho? So the first one, usne kya reply kiya ki andha hai kya dikhta nahi tere ko? Bhai, are you blind? Patthar tod raha hoon. Theek hai? Phir yahi sawaal humne doosre se kiya. So you know what the second one replied? Wo kehta hai main to mandir bana raha hoon. So now guys tell me, kiski productivity aur output better hogi? First ya second? Second. To now the question to you is ki aapke log patthar tod rahe hain ya phir mandir bana rahe hain?",
+      "summary": "Sanjeev shares a powerful story about two stone breakers to illustrate the importance of having a clear vision and purpose in business.",
+      "insight_score": 85,
+      "reaction_score": 30,
+      "tags": [
+        "Inspiration",
+        "Leadership",
+        "Employee Motivation",
+        "Vision"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "50:12 - 51:15",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_3.mp4"
+    },
+    {
+      "start_seconds": 3636.0,
+      "end_seconds": 3665.0,
+      "quote": "Ab humne pucha ki now can you create a process flowchart? What do you think? Guys look at this. Yeh pura code dikha ja raha hai. It is creating a code for the process flowchart. Taaliyan to bajni chahiye.",
+      "summary": "Demonstrating how AI can instantly generate code and build a full process flowchart in seconds.",
+      "insight_score": 80,
+      "reaction_score": 40,
+      "tags": [
+        "AI Tools",
+        "Process Automation",
+        "Flowchart Generation",
+        "Productivity"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "1:00:36 - 1:01:05",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_4.mp4"
+    },
+    {
+      "start_seconds": 4242.0,
+      "end_seconds": 4335.0,
+      "quote": "After giving this file to AI, guys, it has created this entire dashboard. Isne pura production ka plan bana diya hai... Entire production timeline, and this is not an image, this is an interactive dashboard. Day-wise production plan, resource allocation, engineers, installation, quality control, everything.",
+      "summary": "Showcasing how AI converts raw production data into an interactive, end-to-end management dashboard.",
+      "insight_score": 90,
+      "reaction_score": 30,
+      "tags": [
+        "Production Planning",
+        "AI Dashboards",
+        "Operations Management",
+        "Business Automation"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "1:10:42 - 1:12:15",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_5.mp4"
+    },
+    {
+      "start_seconds": 4719.0,
+      "end_seconds": 4805.0,
+      "quote": "If you want to make a very high-rise building, then what do you need guys? Foundation. Exactly. To AI cannot work just like that. What does AI need? AI also needs clear and defined ways of doing things, that is standard operating procedure. Your process must be clear... Another thing that AI lives on is data.",
+      "summary": "Why AI requires strong foundational SOPs and structured clean data to work effectively in an enterprise.",
+      "insight_score": 90,
+      "reaction_score": 30,
+      "tags": [
+        "AI Implementation",
+        "SOPs",
+        "Data Management",
+        "Enterprise AI"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "1:18:39 - 1:20:05",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_6.mp4"
+    },
+    {
+      "start_seconds": 5305.0,
+      "end_seconds": 5335.0,
+      "quote": "Jaise Google, Amazon, Facebook, Meta yeh saari companiya create huin, to meri to yahi vision hai ki jitne log is kamre mein baithe hue hain na... hamari country se minimum 500 Fortune 500 companies nikalni chahiye. That is my vision for them, ki using AI let us conquer the world.",
+      "summary": "An inspiring vision for Indian entrepreneurs to build Fortune 500 companies using AI and conquer the global market.",
+      "insight_score": 85,
+      "reaction_score": 40,
+      "tags": [
+        "Entrepreneurship",
+        "Inspiration",
+        "Fortune 500",
+        "AI Vision"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "1:28:25 - 1:28:55",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_7.mp4"
+    },
+    {
+      "start_seconds": 6322.0,
+      "end_seconds": 6368.0,
+      "quote": "When I say wise guy, because he is 3 times TEDx speaker, he is the recipient of Philip Kotler Award, he is in this industry 15 years, he is actually a wealth strategist and finance expert. So please put your hands together as we welcome the wise guy Mr. Arpit Arora!",
+      "summary": "Introduction of wealth strategist and finance expert Arpit Arora to discuss monetizing with AI.",
+      "insight_score": 60,
+      "reaction_score": 40,
+      "tags": [
+        "introduction",
+        "wealth management",
+        "tedx speaker",
+        "investing"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "1:45:22 - 1:46:08",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_8.mp4"
+    },
+    {
+      "start_seconds": 6476.0,
+      "end_seconds": 6537.0,
+      "quote": "This is not a joke, what I'm about to tell you is going to change your financial life from this very moment, this very moment. Because money making has been so difficult in the past, investments had been so difficult in the past, ab sab kuch aise ho sakta hai.",
+      "summary": "Arpit Arora hooks the audience by promising transformative financial insights using AI tools.",
+      "insight_score": 70,
+      "reaction_score": 30,
+      "tags": [
+        "financial freedom",
+        "investing",
+        "ai wealth",
+        "motivation"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "1:47:56 - 1:48:57",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_9.mp4"
+    },
+    {
+      "start_seconds": 7227.0,
+      "end_seconds": 7344.0,
+      "quote": "Banking sector sasta hai, mujhe PE ratio jisko price to earning kehte hain... bank nifty ka PE ratio 12.9 aur 36 ki range mein raha hai pichhle 5 saalon mein. Aur abhi as of Feb 11, 2025 Bank Nifty ka PE kitna hai? 12.9. Which means iski valuation 5 saal peeche chali gayi. Covid ke baad jab invest kiya tha toh kaise return aaye the?",
+      "summary": "Arpit explains how AI identified undervalued banking stocks trading at Covid-era P/E valuation ratios.",
+      "insight_score": 90,
+      "reaction_score": 30,
+      "tags": [
+        "stock market",
+        "pe ratio",
+        "bank nifty",
+        "value investing"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "2:00:27 - 2:02:24",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_10.mp4"
+    },
+    {
+      "start_seconds": 9224.0,
+      "end_seconds": 9288.0,
+      "quote": "Iska naam hai India Tour Cash Flow Revolution, jiske andar 21 dino mein main travel karne wala hu 10,000 kilometer... Har jagah pe ye sandesh pahunchana hi hai, bilkul exactly, ki cash flow is important.",
+      "summary": "Jagmohan announces his India Tour Cashflow Revolution covering 10,000 km in 21 days to spread cash flow awareness across India.",
+      "insight_score": 88,
+      "reaction_score": 40,
+      "tags": [
+        "cashflow",
+        "revolution",
+        "motivation",
+        "india tour"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "2:33:44 - 2:34:48",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_11.mp4"
+    },
+    {
+      "start_seconds": 9680.0,
+      "end_seconds": 9725.0,
+      "quote": "Mere business se inhone itna samay bitane ke baad bhi, last year bhi aisi opportunity dhoondhi jisse ki 450 crore ka cash flow mera system se bahar ho gaya... Teviasize karke aapko cheeze bata rahe hain, lekin depth bohot zyada hai.",
+      "summary": "A client testifies how Jagmohan's financial expertise helped unlock 450 Crores in cash flow for his business.",
+      "insight_score": 95,
+      "reaction_score": 40,
+      "tags": [
+        "case study",
+        "450 crore",
+        "cashflow",
+        "testimonial"
+      ],
+      "has_reaction": true,
+      "score": 100,
+      "timestamp_display": "2:41:20 - 2:42:05",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_12.mp4"
+    },
+    {
+      "start_seconds": 847.0,
+      "end_seconds": 943.0,
+      "quote": "So you know what the AI told them? Any guesses? To the AI asked them to stop turning left. Because in US, left turns are not free... To AI ne kaha left turn karna band kar do... AI redesigned all the routes, and out of every 10 turns, only two turns were left turns. Remaining 80% turns were right turns. You know what happened? So it saved them 10 million gallons of fuel and 20,000 metric tons of CO2 emissions.",
+      "summary": "Case study of how UPS AI saved 10 million gallons of fuel by eliminating left turns.",
+      "insight_score": 95,
+      "reaction_score": 0,
+      "tags": [
+        "UPS Case Study",
+        "AI Optimization",
+        "Fuel Savings",
+        "Algorithm"
+      ],
+      "has_reaction": false,
+      "score": 95,
+      "timestamp_display": "14:07 - 15:43",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_13.mp4"
+    },
+    {
+      "start_seconds": 9599.0,
+      "end_seconds": 9647.0,
+      "quote": "95% jo logon se mil raha hu na, chehre par unke smile hai lekin andar dard hai, EMI nahi nikal rahi hai, loan nahi ho raha, supplier chase kar rahe hain, galat business model ki wajah se.",
+      "summary": "Jagmohan speaks about the hidden financial pain of 95% of business owners and the need for correct cash-rich business models.",
+      "insight_score": 95,
+      "reaction_score": 0,
+      "tags": [
+        "entrepreneurship",
+        "business pain",
+        "cashflow",
+        "reality check"
+      ],
+      "has_reaction": false,
+      "score": 95,
+      "timestamp_display": "2:39:59 - 2:40:47",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_14.mp4"
+    },
+    {
+      "start_seconds": 8548.0,
+      "end_seconds": 8588.0,
+      "quote": "Lekin zaroori thodi hai ki woh jo profit hoga woh cash profit hoga? Maloom hai na aapko, 10,000 ka mobile bech diya, 8,000 mein khareed liya, aur jo 2,000 ka profit hua woh profit to hai, lekin jo 10,000 mein mobile becha uske paise to aaye hi nahi abhi. Woh to 8,000 rupaye ghar se lage hue hain. Do naye mobile aur order mil gaya hai, 16,000 rupaye aur laga diye hain, market se 30,000 rupaye lene hain, to 24,000 rupaye ka cash negative ho chuka hai. To business dashboard yeh bata raha hai ki aakhir kitni, kitni growth karoge? Kahan tak growth karoge? Profit bankrupt kar dega.",
+      "summary": "CA Jagmohan Singh explains how rapid growth and paper profits can actually bankrupt a business if the cash is tied up in receivables and inventory.",
+      "insight_score": 92,
+      "reaction_score": 0,
+      "tags": [
+        "Cash Flow",
+        "Profitability",
+        "Business Growth"
+      ],
+      "has_reaction": false,
+      "score": 92,
+      "timestamp_display": "2:22:28 - 2:23:08",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_15.mp4"
+    },
+    {
+      "start_seconds": 9168.0,
+      "end_seconds": 9200.0,
+      "quote": "As a business owner humen ye question poochna hona chahiye, pata hona chahiye ki mai poochna kya hai. Answer dene wala ab hamare paas baitha hai... Present state se desired state pe jaane ke liye ask the right question and reach to the right destination.",
+      "summary": "Sanjeev Jain and Jagmohan highlight that the key to leveraging AI in business is knowing the right questions to ask.",
+      "insight_score": 92,
+      "reaction_score": 0,
+      "tags": [
+        "ai",
+        "mindset",
+        "business strategy",
+        "prompting"
+      ],
+      "has_reaction": false,
+      "score": 92,
+      "timestamp_display": "2:32:48 - 2:33:20",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_16.mp4"
+    },
+    {
+      "start_seconds": 1644.0,
+      "end_seconds": 1733.0,
+      "quote": "A translator to break that barrier. So AI is the same translator. AI will help you break the skills barrier. To AI jo hai wo ek aisa translator hai it can convert your ideas into text. It can convert your ideas into images, videos... it can convert your ideas into music... into proteins, into DNA, into machines. Aapke paas skill nahi hai, mere paas skill nahi hai, main music nahi bana sakta, but with help of AI, now I can.",
+      "summary": "Explaining AI as a skill barrier translator that converts imagination directly into finished output.",
+      "insight_score": 90,
+      "reaction_score": 0,
+      "tags": [
+        "AI Skills",
+        "Creativity",
+        "Barrier Breaker"
+      ],
+      "has_reaction": false,
+      "score": 90,
+      "timestamp_display": "27:24 - 28:53",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_17.mp4"
+    },
+    {
+      "start_seconds": 5934.0,
+      "end_seconds": 6027.0,
+      "quote": "Yeh humne use kiya NotebookLM... NotebookLM mein humne kya kiya dekhiye... these are all the sources... After you have added the sources, you just need to ask the right question. You know AI is what? Just prompting. Aap prompt sahi se daloge, aapko jawab sahi se milega... isne bata diya ki Nitesh is the best person, why don't you hire him?",
+      "summary": "Using Google's NotebookLM to shortlist and rank job applicant resumes based on company documents and job descriptions.",
+      "insight_score": 90,
+      "reaction_score": 0,
+      "tags": [
+        "NotebookLM",
+        "AI Hiring",
+        "Recruitment Automation",
+        "Prompt Engineering"
+      ],
+      "has_reaction": false,
+      "score": 90,
+      "timestamp_display": "1:38:54 - 1:40:27",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_18.mp4"
+    },
+    {
+      "start_seconds": 8135.0,
+      "end_seconds": 8163.0,
+      "quote": "Honestly answering this question, what I see is that the quality of your question will determine the quality of your result. If I ask ChatGPT a very simple question and a very basic manner, it will answer me in a basic manner. Jab aap mere prompts dekhoge to you would see ki how I've very carefully expressed my interest of timeline, my risk, my goals, my stats and numbers.",
+      "summary": "Arpit explains that the quality of results from AI tools like ChatGPT depends entirely on the quality and specificity of the prompts provided.",
+      "insight_score": 90,
+      "reaction_score": 0,
+      "tags": [
+        "AI Prompts",
+        "ChatGPT",
+        "Financial Advice"
+      ],
+      "has_reaction": false,
+      "score": 90,
+      "timestamp_display": "2:15:35 - 2:16:03",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_19.mp4"
+    },
+    {
+      "start_seconds": 9108.0,
+      "end_seconds": 9165.0,
+      "quote": "Isko maine input ke andar sirf aur sirf company ki financial summary to di thi... Isko kya bola, bana de business ka dashboard... Working capital aur cash profit ko dekha jaye to wahan dekho kya uske andar usne relationship establish karke di hai.",
+      "summary": "Jagmohan demonstrates how AI creates an instant business dashboard and analyzes relationships between working capital and cash profit.",
+      "insight_score": 90,
+      "reaction_score": 0,
+      "tags": [
+        "ai in business",
+        "dashboards",
+        "finance",
+        "automation"
+      ],
+      "has_reaction": false,
+      "score": 90,
+      "timestamp_display": "2:31:48 - 2:32:45",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_20.mp4"
+    },
+    {
+      "start_seconds": 8304.0,
+      "end_seconds": 8348.0,
+      "quote": "Business ke andar sabse badi problem aur sabse bada solution ek hi hai. Kya hai woh? Cash flow. To cash flow jo hai, woh business ki jaan hai, foundation hai. To jaise Sanjeev ji ne bataya ki humari baat ho rahi thi, to kaisa ho jaye ki is artificial intelligence ke dwara, dekho, money create honi shuru ho jaye. The creation, cash flow ki creation aur uski management. Dekho, zindagi mein paisa kamana aasan hai, making money aapke hai na model jiski wajah se kitna revenue aap generate kar lete ho, revenue generate karna aasan hai lekin asli khel kiske andar aata hai? Cash flow ki management ke andar aata hai.",
+      "summary": "CA Jagmohan Singh explains that while generating revenue is easy, the real challenge and foundation of any business lies in managing cash flow.",
+      "insight_score": 88,
+      "reaction_score": 0,
+      "tags": [
+        "Cash Flow",
+        "Business Management",
+        "Financial Literacy"
+      ],
+      "has_reaction": false,
+      "score": 88,
+      "timestamp_display": "2:18:24 - 2:19:08",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_21.mp4"
+    },
+    {
+      "start_seconds": 507.0,
+      "end_seconds": 553.0,
+      "quote": "To AI kya hai? Aapka jo computer hai na, just imagine kariye ki abhi tak jo computer tha, wo sirf ek servant ki tarah tha ki haan bhai mere ko ek typewriter maan lijiye aap... But now, just imagine ki aapke computer mein dimaag aa gaya. Ab wo wo cheezein bhi kar sakta hai jo aap soch nahi sakte. So your computer now has a brain.",
+      "summary": "Explanation of how AI transforms computers from mechanical typewriters into thinking brains.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "What is AI",
+        "Computer Brain",
+        "Innovation"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "08:27 - 09:13",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_22.mp4"
+    },
+    {
+      "start_seconds": 2705.0,
+      "end_seconds": 2808.0,
+      "quote": "Do you know what has Elon Musk predicted about robots? What will be the ratio of human being to robots in the next 10 years? Tell me guys. 1:3. Teen robot har ek person ke liye in the next 10 years... And do you know which industry is predicted to be 100x of the automotive industry? Robots! So the robot industry will be 100 times of the automobile industry.",
+      "summary": "Elon Musk's prediction of a 1:3 human-to-robot ratio and the massive 100x robotics industry expansion.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "Elon Musk",
+        "Robotics",
+        "Future of Work",
+        "Predictions"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "45:05 - 46:48",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_23.mp4"
+    },
+    {
+      "start_seconds": 2005.0,
+      "end_seconds": 2048.0,
+      "quote": "Chhatha trend, AI to democratize knowledge and skills. Pehle jahan kisi top MBA ya mehnge consultant ki zaroorat hoti thi, ab AI real-time feedback dekar junior employees ko bhi expert bana sakta hai. Real-time suggestion, error checking, performance coaching, sab kuch chutkiyon mein. Ek intern bhi client pitch par insights de sakta hai kyunki AI tools use step-by-step guide karte hain. Studies kehti hain ki low-skilled workers AI ki madad se 30-35% productivity boost kar sakte hain.",
+      "summary": "Sanjeev explains how AI democratizes knowledge, allowing junior employees and low-skilled workers to significantly boost their productivity and perform like experts.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "AI Trends",
+        "Productivity",
+        "Skill Democratization",
+        "Business Growth"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "33:25 - 34:08",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_24.mp4"
+    },
+    {
+      "start_seconds": 4109.0,
+      "end_seconds": 4144.0,
+      "quote": "So how did this happen? Very quickly I can show you ki this happened in a Google Sheet. Yeh Google Sheet hai, yeh automatically jaati hai yahan pe WhatsApp aur email ke settings hain. Aur yahan par jo hai humne sirf question pucha hai and we get the answer, and this runs automatically.",
+      "summary": "Explaining how an AI agent integrates with Google Sheets to automate process monitoring and send reports via WhatsApp and email.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "AI Monitoring",
+        "Google Sheets Automation",
+        "Business Operations",
+        "AI Agents"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "1:08:29 - 1:09:04",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_25.mp4"
+    },
+    {
+      "start_seconds": 5640.0,
+      "end_seconds": 5702.0,
+      "quote": "dekhiye pura details bana ke de diya as per Government of India laws. So main technical aspect pe nahi jaa raha hoon, iska benefits dekhiye team ka benefit kitna hai. Your HR team will be struggling going here and there, Google se dhoondhegi... it's just a 2 minute job now which would have been a 4-5 hours job.",
+      "summary": "Speaker shows how an AI agent drafts policy documents compliant with Indian law, saving HR hours of manual work.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "hr policy",
+        "ai agents",
+        "time saving",
+        "compliance"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "1:34:00 - 1:35:02",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_26.mp4"
+    },
+    {
+      "start_seconds": 7960.0,
+      "end_seconds": 7995.0,
+      "quote": "I went against all methodologies ki aap 100 company mein lagao aur ek accha karegi. Maine ek mein hi lagaya aur maine aisa parameter banaya ki I made sure I make money out of it. And this is the framework which you can use to analyze startups as well. So, the framework is called Fintrix.",
+      "summary": "Arpit introduces his 'Fintrix' framework for analyzing and investing in startups, challenging the traditional method of diversifying across 100 companies.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "Startup Investing",
+        "Fintrix Framework",
+        "Wealth Generation"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "2:12:40 - 2:13:15",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_27.mp4"
+    },
+    {
+      "start_seconds": 8453.0,
+      "end_seconds": 8476.0,
+      "quote": "Isme jab bill discounting ki baat aati hai na, jab aapne sale to kar diya, lekin maza to tab hai na ki woh paisa apne ghar mein aaye. Idhar aapne sale kiya, within three days jab paisa aapke ghar mein aa gaya aur jab customer aapko paisa dega, to jo aapne bill discounting karwayi thi uski direct payment ho jayegi. To money in hand is more powerful than the money with the customer.",
+      "summary": "CA Jagmohan Singh highlights the power of bill discounting, emphasizing that having cash in hand is far more valuable than having money tied up with customers.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "Bill Discounting",
+        "Cash Flow",
+        "Working Capital"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "2:20:53 - 2:21:16",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_28.mp4"
+    },
+    {
+      "start_seconds": 9016.0,
+      "end_seconds": 9058.0,
+      "quote": "Man lijiye meri jo money ki availability 2.5 crore ki hai... jab sale badh rahi hai to ek time aisa aata hai na ki jab bohot sale hoti hai, bohot kaam hota hai lekin paise hi nahi hote... It is just like you are talking to your financial summary.",
+      "summary": "Jagmohan explains the cash crunch paradox where high sales lead to liquidity issues and how analyzing financial summaries helps.",
+      "insight_score": 85,
+      "reaction_score": 0,
+      "tags": [
+        "business",
+        "cashflow",
+        "finance",
+        "entrepreneurship"
+      ],
+      "has_reaction": false,
+      "score": 85,
+      "timestamp_display": "2:30:16 - 2:30:58",
+      "clip_url": "/api/video/STAGE CONTENT PART 1 _clip_29.mp4"
+    }
+  ],
+  "total_duration": 9849.6
+}

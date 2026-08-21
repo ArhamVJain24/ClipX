@@ -72,14 +72,18 @@
         });
     }
 
+    // ===== NEW AUTO-CLIPPER LOGIC =====
+    
+    let activeMomentIndex = -1;
+
     // --- Update Time Display ---
     if (video) {
         video.addEventListener('loadedmetadata', () => {
-            totalTimeEl.textContent = formatTime(video.duration);
+            // totalTimeEl will just show the active clip's duration, but let's show the global total
+            totalTimeEl.textContent = formatTime(totalDuration || video.duration || 0);
             
-            // Re-render markers once we have the video duration if it was missing
             if (!totalDuration || totalDuration === 0) {
-                timelineTrack.innerHTML = ''; // clear old markers
+                timelineTrack.innerHTML = '';
                 if (timelineWaveform) timelineTrack.appendChild(timelineWaveform);
                 if (timelinePlayhead) timelineTrack.appendChild(timelinePlayhead);
                 renderTimelineMarkers();
@@ -87,16 +91,31 @@
         });
 
         video.addEventListener('timeupdate', () => {
-            currentTimeEl.textContent = formatTime(video.currentTime);
+            if (activeMomentIndex === -1) return; // No clip playing yet
+            const m = moments[activeMomentIndex];
+            
+            // Calculate Global Time
+            // The video.currentTime is from 0 to 45 (for the clip).
+            // But the clip might have a 2-second buffer. Let's just do m.start_seconds + video.currentTime
+            // Note: The clip starts at max(0, m.start_seconds - 2).
+            const clipStartOffset = Math.max(0, m.start_seconds - 2);
+            const globalTime = clipStartOffset + video.currentTime;
+            
+            currentTimeEl.textContent = formatTime(globalTime);
 
-            // Update playhead position
-            if (video.duration && timelinePlayhead) {
-                const pct = (video.currentTime / video.duration) * 100;
+            // Update playhead position on the global timeline
+            if (totalDuration && timelinePlayhead) {
+                const pct = (globalTime / totalDuration) * 100;
                 timelinePlayhead.style.left = pct + '%';
             }
 
             // Highlight active moment card
-            highlightActiveMoment(video.currentTime);
+            highlightActiveMoment(globalTime);
+        });
+        
+        video.addEventListener('ended', () => {
+            playBtn.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>';
+            playBtn.style.opacity = '1';
         });
     }
 
@@ -116,8 +135,8 @@
     function renderTimelineMarkers() {
         if (!timelineTrack) return;
         
-        const durationToUse = (totalDuration && totalDuration > 0) ? totalDuration : video.duration;
-        if (!durationToUse || durationToUse === 0) return; // Wait for metadata
+        const durationToUse = (totalDuration && totalDuration > 0) ? totalDuration : 100;
+        if (!durationToUse || durationToUse === 0) return;
 
         moments.forEach((m, index) => {
             const startPct = (m.start_seconds / durationToUse) * 100;
@@ -125,7 +144,10 @@
             marker.className = 'timeline-marker' + (m.has_reaction ? ' reaction' : ' insight');
             marker.style.left = startPct + '%';
             marker.title = m.quote;
-            marker.addEventListener('click', () => seekToMoment(index));
+            marker.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent track click
+                seekToMoment(index);
+            });
             timelineTrack.appendChild(marker);
         });
 
@@ -145,25 +167,19 @@
             card.dataset.index = index;
             card.addEventListener('click', () => seekToMoment(index));
 
-            // Determine score bar color
             let scoreColor = 'var(--color-muted)';
             if (m.score >= 70) scoreColor = 'var(--color-cyan)';
             else if (m.score >= 50) scoreColor = 'var(--color-amber)';
 
-            // Build tags HTML
             const tagsHTML = (m.tags || []).map(tag => {
                 const isReaction = tag.includes('REACTION') || tag.includes('EMOTIONAL') || tag.includes('HUMOR');
                 return `<span class="tag ${isReaction ? 'tag-reaction' : 'tag-insight'}">${tag}</span>`;
             }).join('');
 
-            // Build timestamp display
-            const tsDisplay = m.timestamp_display || (formatTime(m.start_seconds) + ' — ' + formatTime(m.end_seconds));
+            const tsDisplay = m.timestamp_display || (formatTime(m.start_seconds) + ' - ' + formatTime(m.end_seconds));
 
-            // Determine timestamp text color
             let timestampColor = '';
-            if (m.score === 100) {
-                timestampColor = 'color: var(--color-purple);';
-            }
+            if (m.score === 100) timestampColor = 'color: var(--color-purple);';
 
             card.innerHTML = `
                 <div class="moment-top-row">
@@ -178,18 +194,27 @@
                 <div class="moment-tags">${tagsHTML}</div>
             `;
 
-            // Staggered animation
             card.style.animationDelay = (index * 0.08) + 's';
             momentsList.appendChild(card);
         });
     }
 
-    // --- Seek Video to a Moment ---
+    // --- Seek Video to a Moment (Auto-Clipper Swap) ---
     function seekToMoment(index) {
         const m = moments[index];
         if (!m || !video) return;
-        video.currentTime = m.start_seconds;
-        video.play();
+        
+        // Swap the video source to the pre-cut clip!
+        if (m.clip_url) {
+            video.src = m.clip_url;
+        } else {
+            video.src = '/api/video/' + filename; // fallback
+            video.currentTime = m.start_seconds;
+        }
+        
+        activeMomentIndex = index;
+        
+        video.play().catch(e => console.log("Auto-play prevented", e));
         playBtn.style.opacity = '0';
 
         // Scroll the card into view
@@ -200,11 +225,12 @@
     }
 
     // --- Highlight Active Moment Card ---
-    function highlightActiveMoment(currentTime) {
+    function highlightActiveMoment(globalTime) {
         const cards = momentsList.querySelectorAll('.moment-card');
         cards.forEach((card, i) => {
             const m = moments[i];
-            if (m && currentTime >= m.start_seconds && currentTime <= m.end_seconds) {
+            // Highlight if we are actively playing this clip, or if time is within bounds
+            if (i === activeMomentIndex || (m && globalTime >= m.start_seconds && globalTime <= m.end_seconds)) {
                 card.classList.add('active');
             } else {
                 card.classList.remove('active');
@@ -215,10 +241,7 @@
     // --- Timeline Click to Seek ---
     if (timelineTrack && video) {
         timelineTrack.addEventListener('click', (e) => {
-            const rect = timelineTrack.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const pct = x / rect.width;
-            video.currentTime = pct * video.duration;
+            alert("With the new Auto-Clipper system, the full 14GB video is no longer loaded in your browser to prevent crashing. You can only click on the specific colored markers or cards to play the extracted viral clips!");
         });
     }
 
@@ -229,8 +252,15 @@
             if (data.success) {
                 moments = data.moments;
                 totalDuration = data.total_duration;
+                if (totalTimeEl) totalTimeEl.textContent = formatTime(totalDuration);
                 renderTimelineMarkers();
                 renderMomentCards();
+                
+                // Auto-load the first clip if available
+                if (moments.length > 0) {
+                    seekToMoment(0);
+                    setTimeout(() => video.pause(), 100); // pause it immediately just to load thumbnail
+                }
             } else {
                 if (momentsList) momentsList.innerHTML = `<p style="padding:20px;color:var(--color-amber);">Error: ${data.error}</p>`;
             }

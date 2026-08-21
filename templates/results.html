@@ -13,14 +13,17 @@
         <div class="header-left">
             <span class="logo">ClipX</span>
         </div>
-        <button class="btn-new-project" onclick="window.location.href='/'">New Project</button>
+        <div class="header-right">
+            <button class="btn-new-project" style="background-color: #d93838; border-color: #d93838; margin-right: 15px;" onclick="cleanupProject('{{ filename }}')">Close & Free Space</button>
+            <button class="btn-new-project" onclick="window.location.href='/'">New Project</button>
+        </div>
     </header>
 
     <main class="results-dashboard">
         <!-- Left Column: Video + Timeline -->
         <div class="video-section">
             <div class="video-container">
-                <video class="video-player" id="videoPlayer" src="/api/video/{{ filename }}" preload="metadata"></video>
+                <video class="video-player" id="videoPlayer" preload="metadata"></video>
                 <div class="video-controls-overlay">
                     <button class="play-btn" id="playBtn">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
@@ -64,6 +67,18 @@
         </div>
     </main>
 
+    <script>
+        // Clean up project function
+        function cleanupProject(file) {
+            if (confirm("Are you sure you want to close this project? This will permanently delete the 45-second extracted clips and temporary files to free up space. Your original video will NOT be deleted.")) {
+                fetch('/api/cleanup/' + file, { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        window.location.href = '/';
+                    });
+            }
+        }
+    </script>
     <script src="/static/js/app.js"></script>
 </body>
 </html>

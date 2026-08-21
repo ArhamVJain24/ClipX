@@ -34,7 +34,53 @@
                 <input type="text" id="driveLinkInput" placeholder="Or paste Google Drive link here..." style="flex: 1; padding: 0 20px; border-radius: 30px; border: 1px solid hsl(0, 0%, 25%); background: hsl(210, 10%, 8%); color: var(--text-head); outline: none; font-family: 'Inter', sans-serif; font-size: 16px; transition: border-color 0.2s ease;">
                 <button id="btnDriveUpload" class="btn-upload" style="margin: 0; padding: 0 32px; font-size: 16px; border: none; font-family: 'Inter', sans-serif; height: 100%; border-radius: 30px;">Import</button>
             </div>
-            <p style="font-size: 13px; color: hsl(0, 0%, 50%); margin-top: 16px; font-weight: 500;">Ensure link is set to "Anyone with the link can view"</p>
+            
+            <div style="width: 100%; display: flex; align-items: center; margin: 24px 0;">
+                <div style="flex: 1; height: 1px; background: hsl(0, 0%, 20%);"></div>
+                <span style="padding: 0 16px; color: hsl(0, 0%, 50%); font-size: 12px; font-weight: 600; letter-spacing: 1px;">OR</span>
+                <div style="flex: 1; height: 1px; background: hsl(0, 0%, 20%);"></div>
+            </div>
+
+            <style>
+                #localVideoSelect {
+                    flex: 1;
+                    padding: 0 40px 0 20px;
+                    border-radius: 30px;
+                    border: 1px solid hsl(0, 0%, 25%);
+                    background-color: hsl(210, 10%, 8%);
+                    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='hsl(0, 0%, 60%)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                    background-repeat: no-repeat;
+                    background-position: right 16px center;
+                    background-size: 16px;
+                    color: hsl(0, 0%, 90%);
+                    outline: none;
+                    font-family: 'Inter', sans-serif;
+                    font-size: 15px;
+                    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                    appearance: none;
+                    cursor: pointer;
+                }
+                #localVideoSelect:focus {
+                    border-color: hsl(168, 60%, 48%);
+                    box-shadow: 0 0 0 3px rgba(32, 178, 149, 0.15);
+                }
+                #localVideoSelect option {
+                    background-color: hsl(210, 10%, 12%);
+                    color: hsl(0, 0%, 90%);
+                    font-size: 14px;
+                    padding: 12px;
+                }
+            </style>
+            <div class="local-upload-container" style="display: flex; gap: 12px; width: 100%; box-sizing: border-box; height: 52px;">
+                <select id="localVideoSelect">
+                    <option value="" disabled selected hidden>Select from Local Library...</option>
+                    {% for f in local_files %}
+                    <option value="{{ f }}">{{ f }}</option>
+                    {% endfor %}
+                </select>
+                <button id="btnLocalAnalyze" class="btn-upload" style="margin: 0; padding: 0 32px; font-size: 16px; border: none; font-family: 'Inter', sans-serif; height: 100%; border-radius: 30px; background-color: hsl(168, 60%, 48%); color: hsl(210, 10%, 8%); font-weight: 700; transition: transform 0.2s ease, filter 0.2s ease;">Analyze</button>
+            </div>
+            <p style="font-size: 13px; color: hsl(0, 0%, 50%); margin-top: 16px; font-weight: 500; text-align: center; line-height: 1.5;">Pro Tip: For massive 14GB+ files, drag them directly into the <code style="background: hsl(0, 0%, 15%); padding: 2px 6px; border-radius: 4px; color: hsl(168, 60%, 48%);">ClipX/uploads</code> folder on your PC first to bypass browser upload limits.</p>
         </div>
     </main>
 
@@ -252,6 +298,72 @@
                     errorDiv.innerHTML = '<strong>⚠️ Google AI Servers Busy</strong><br>The AI is currently experiencing massive global demand. Please wait a few minutes and try again. Your video is perfectly fine.';
                 } else {
                     errorDiv.innerHTML = '<strong>⚠️ Error</strong><br>' + err.message;
+                }
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Handle Local Library Upload
+        const btnLocalAnalyze = document.getElementById('btnLocalAnalyze');
+        const localVideoSelect = document.getElementById('localVideoSelect');
+        
+        btnLocalAnalyze.addEventListener('click', async () => {
+            const filename = localVideoSelect.value;
+            if (!filename) {
+                alert('Please select a video from the dropdown.');
+                return;
+            }
+
+            document.getElementById('errorMessage').style.display = 'none';
+            uploadScreen.style.display = 'none';
+            processingScreen.style.display = 'flex';
+            statusText.textContent = 'Analyzing the local video...';
+            progressBar.style.width = '30%';
+            progressPercent.textContent = '30%';
+
+            try {
+                let fakeProgress = 30;
+                const progressInterval = setInterval(() => {
+                    if (fakeProgress < 95) {
+                        fakeProgress += Math.random() * 5;
+                        if (fakeProgress > 95) fakeProgress = 95;
+                        progressBar.style.width = fakeProgress + '%';
+                        progressPercent.textContent = Math.floor(fakeProgress) + '%';
+                    }
+                }, 1000);
+
+                // Step 2: Analyze directly (Async Polling)
+                const analyzeInitResp = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: filename })
+                });
+                
+                const analyzeInitData = await analyzeInitResp.json();
+                if (!analyzeInitData.success) throw new Error(analyzeInitData.error || 'Failed to start analysis');
+
+                // Poll until complete
+                await pollTask(analyzeInitData.task_id);
+                
+                clearInterval(progressInterval);
+
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                statusText.textContent = 'Done! Redirecting...';
+
+                setTimeout(() => {
+                    window.location.href = '/results/' + encodeURIComponent(filename);
+                }, 500);
+
+            } catch (err) {
+                uploadScreen.style.display = 'flex';
+                processingScreen.style.display = 'none';
+                const errorDiv = document.getElementById('errorMessage');
+                
+                if (err.message.includes('503') || err.message.includes('overloaded')) {
+                    errorDiv.innerHTML = '<strong>?? Google AI Servers Busy</strong><br>The AI is currently experiencing massive global demand. Please wait a few minutes and try again. Your video is perfectly fine.';
+                } else {
+                    errorDiv.innerHTML = '<strong>?? Error</strong><br>' + err.message;
                 }
                 errorDiv.style.display = 'block';
             }
