@@ -108,17 +108,7 @@ def add_cors_headers(response):
 
 @app.route('/')
 def index():
-    uploads_dir = app.config['UPLOAD_FOLDER']
-    local_files = []
-    if os.path.exists(uploads_dir):
-        for f in os.listdir(uploads_dir):
-            if f.lower().endswith('.mp4') and '_clip_' not in f:
-                local_files.append(f)
-                
-    # Detect if we are running on Render (cloud) vs Localhost
-    is_local = os.environ.get('RENDER') is None
-    
-    return render_template('upload.html', local_files=local_files, is_local=is_local)
+    return render_template('upload.html')
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
